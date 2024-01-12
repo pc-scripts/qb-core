@@ -1,5 +1,13 @@
 QBCore.Functions = {}
 
+local function GetCoords(coords, ped)
+    if coords then
+        return type(coords) == 'table' and vec3(coords.x, coords.y, coords.z) or coords
+    end
+
+    return GetEntityCoords(ped)
+end
+
 -- Player
 
 function QBCore.Functions.GetPlayerData(cb)
@@ -128,7 +136,10 @@ function QBCore.Functions.TriggerCallback(name, cb, ...)
 end
 
 function QBCore.Functions.Progressbar(name, label, duration, useWhileDead, canCancel, disableControls, animation, prop, propTwo, onFinish, onCancel)
-    if GetResourceState('progressbar') ~= 'started' then error('progressbar needs to be started in order for QBCore.Functions.Progressbar to work') end
+    if GetResourceState('progressbar') ~= 'started' then
+        error('progressbar needs to be started in order for QBCore.Functions.Progressbar to work')
+    end
+
     exports['progressbar']:Progress({
         name = name:lower(),
         duration = duration,
@@ -186,11 +197,7 @@ end
 
 function QBCore.Functions.GetClosestPed(coords, ignoreList)
     local ped = PlayerPedId()
-    if coords then
-        coords = type(coords) == 'table' and vec3(coords.x, coords.y, coords.z) or coords
-    else
-        coords = GetEntityCoords(ped)
-    end
+    coords = GetCoords(ped, coords)
     ignoreList = ignoreList or {}
     local peds = QBCore.Functions.GetPeds(ignoreList)
     local closestDistance = -1
@@ -220,16 +227,13 @@ function QBCore.Functions.IsWearingGloves()
             return false
         end
     end
+
     return true
 end
 
 function QBCore.Functions.GetClosestPlayer(coords)
     local ped = PlayerPedId()
-    if coords then
-        coords = type(coords) == 'table' and vec3(coords.x, coords.y, coords.z) or coords
-    else
-        coords = GetEntityCoords(ped)
-    end
+    coords = GetCoords(coords, ped)
     local closestPlayers = QBCore.Functions.GetPlayersFromCoords(coords)
     local closestDistance = -1
     local closestPlayer = -1
@@ -343,7 +347,7 @@ function QBCore.Functions.GetBoneDistance(entity, boneType, boneIndex)
 end
 
 function QBCore.Functions.AttachProp(ped, model, boneId, x, y, z, xR, yR, zR, vertex)
-    local modelHash = type(model) == 'string' and GetHashKey(model) or model
+    local modelHash = type(model) == 'string' and joaat(model) or model
     local bone = GetPedBoneIndex(ped, boneId)
     QBCore.Functions.LoadModel(modelHash)
     local prop = CreateObject(modelHash, 1.0, 1.0, 1.0, 1, 1, 0)
@@ -356,7 +360,7 @@ end
 
 function QBCore.Functions.SpawnVehicle(model, cb, coords, isnetworked, teleportInto)
     local ped = PlayerPedId()
-    model = type(model) == 'string' and GetHashKey(model) or model
+    model = type(model) == 'string' and joaat(model) or model
     if not IsModelInCdimage(model) then return end
     if coords then
         coords = type(coords) == 'table' and vec3(coords.x, coords.y, coords.z) or coords
@@ -407,8 +411,8 @@ function QBCore.Functions.SpawnClear(coords, radius)
             closeVeh[#closeVeh + 1] = vehicles[i]
         end
     end
-    if #closeVeh > 0 then return false end
-    return true
+
+    return #closeVeh <= 0
 end
 
 function QBCore.Functions.GetVehicleProperties(vehicle)
