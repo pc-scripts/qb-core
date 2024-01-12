@@ -31,10 +31,6 @@ RegisterNetEvent('QBCore:Command:TeleportToCoords', function(x, y, z, h)
 end)
 
 RegisterNetEvent('QBCore:Command:GoToMarker', function()
-    local PlayerPedId = PlayerPedId
-    local GetEntityCoords = GetEntityCoords
-    local GetGroundZFor_3dCoord = GetGroundZFor_3dCoord
-
     local blipMarker <const> = GetFirstBlipInfoId(8)
     if not DoesBlipExist(blipMarker) then
         QBCore.Functions.Notify(Lang:t('error.no_waypoint'), 'error', 5000)
@@ -47,6 +43,9 @@ RegisterNetEvent('QBCore:Command:GoToMarker', function()
         Wait(0)
     end
 
+    local PlayerPedId = PlayerPedId
+    local GetEntityCoords = GetEntityCoords
+    local GetGroundZFor_3dCoord = GetGroundZFor_3dCoord
     local ped, coords <const> = PlayerPedId(), GetBlipInfoIdCoord(blipMarker)
     local vehicle = GetVehiclePedIsIn(ped, false)
     local oldCoords <const> = GetEntityCoords(ped)
@@ -119,14 +118,17 @@ end)
 -- Vehicle Commands
 
 RegisterNetEvent('QBCore:Command:SpawnVehicle', function(vehName)
-    local ped = PlayerPedId()
     local hash = joaat(vehName)
-    local veh = GetVehiclePedIsUsing(ped)
+
     if not IsModelInCdimage(hash) then return end
+
     RequestModel(hash)
     while not HasModelLoaded(hash) do
         Wait(0)
     end
+
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
 
     if IsPedInAnyVehicle(ped) then
         SetEntityAsMissionEntity(veh, true, true)

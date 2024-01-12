@@ -112,14 +112,10 @@ RegisterNetEvent('QBCore:UpdatePlayer', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
-    local newHunger = Player.PlayerData.metadata['hunger'] - QBCore.Config.Player.HungerRate
-    local newThirst = Player.PlayerData.metadata['thirst'] - QBCore.Config.Player.ThirstRate
-    if newHunger <= 0 then
-        newHunger = 0
-    end
-    if newThirst <= 0 then
-        newThirst = 0
-    end
+
+    local newHunger = math.max(Player.PlayerData.metadata['hunger'] - QBCore.Config.Player.HungerRate, 0)
+    local newThirst = math.max(Player.PlayerData.metadata['thirst'] - QBCore.Config.Player.ThirstRate, 0)
+
     Player.Functions.SetMetaData('thirst', newThirst)
     Player.Functions.SetMetaData('hunger', newHunger)
     TriggerClientEvent('hud:client:UpdateNeeds', src, newHunger, newThirst)
@@ -188,10 +184,12 @@ end)
 -- Non-Chat Command Calling (ex: qb-adminmenu)
 
 RegisterNetEvent('QBCore:CallCommand', function(command, args)
-    local src = source
     if not QBCore.Commands.List[command] then return end
+
+    local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
+
     local hasPerm = QBCore.Functions.HasPermission(src, 'command.' .. QBCore.Commands.List[command].name)
     if hasPerm then
         if QBCore.Commands.List[command].argsrequired and #QBCore.Commands.List[command].arguments ~= 0 and not args[#QBCore.Commands.List[command].arguments] then
