@@ -185,24 +185,6 @@ end)
 
 -- Items
 
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon.
-RegisterNetEvent('QBCore:Server:UseItem', function(item)
-    print(string.format('%s triggered QBCore:Server:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check qb-inventory for the right use on this event.', GetInvokingResource(), source))
-    QBCore.Debug(item)
-end)
-
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot)
-RegisterNetEvent('QBCore:Server:RemoveItem', function(itemName, amount)
-    local src = source
-    print(string.format('%s triggered QBCore:Server:RemoveItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.', GetInvokingResource(), src, amount, itemName))
-end)
-
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot, info)
-RegisterNetEvent('QBCore:Server:AddItem', function(itemName, amount)
-    local src = source
-    print(string.format('%s triggered QBCore:Server:AddItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.', GetInvokingResource(), src, amount, itemName))
-end)
-
 -- Non-Chat Command Calling (ex: qb-adminmenu)
 
 RegisterNetEvent('QBCore:CallCommand', function(command, args)
@@ -239,7 +221,3 @@ QBCore.Functions.CreateCallback('QBCore:Server:CreateVehicle', function(source, 
     local veh = QBCore.Functions.CreateAutomobile(source, model, coords, warp)
     cb(NetworkGetNetworkIdFromEntity(veh))
 end)
-
---QBCore.Functions.CreateCallback('QBCore:HasItem', function(source, cb, items, amount)
--- https://github.com/qbcore-framework/qb-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
---end)
