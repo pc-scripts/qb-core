@@ -1,6 +1,8 @@
 QBCore.Players = {}
 QBCore.Player = {}
 
+local currentResourceName = GetCurrentResourceName()
+
 -- On player login get their data or set defaults
 -- Don't touch any of this unless you know what you are doing
 -- Will cause major issues!
@@ -31,7 +33,7 @@ function QBCore.Player.Login(source, citizenid, newData)
         end
         return true
     else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
+        QBCore.ShowError(currentResourceName, 'ERROR QBCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
         return false
     end
 end
@@ -520,9 +522,9 @@ function QBCore.Player.Save(source)
             metadata = json.encode(PlayerData.metadata)
         })
         if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(source) end
-        QBCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
+        QBCore.ShowSuccess(currentResourceName, PlayerData.name .. ' PLAYER SAVED!')
     else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
+        QBCore.ShowError(currentResourceName, 'ERROR QBCORE.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
     end
 end
 
@@ -541,9 +543,9 @@ function QBCore.Player.SaveOffline(PlayerData)
             metadata = json.encode(PlayerData.metadata)
         })
         if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(PlayerData, true) end
-        QBCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' OFFLINE PLAYER SAVED!')
+        QBCore.ShowSuccess(currentResourceName, PlayerData.name .. ' OFFLINE PLAYER SAVED!')
     else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
+        QBCore.ShowError(currentResourceName, 'ERROR QBCORE.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
     end
 end
 
