@@ -26,6 +26,16 @@ end
 
 -- Utility
 
+function QBCore.Functions.GetTaxPrice(price, taxType)
+    if not QBConfig.Money.TaxTypes[taxType] or QBConfig.Money.TaxTypes[taxType] <= 0 then return price end
+    return math.floor(price * (1 + QBConfig.Money.TaxTypes[taxType] * 0.01))
+end
+
+function QBCore.Functions.GetTaxFromPrice(price, taxType)
+    if not QBConfig.Money.TaxTypes[taxType] or QBConfig.Money.TaxTypes[taxType] <= 0 then return 0 end
+    return math.floor(price * QBConfig.Money.TaxTypes[taxType] * 0.01)
+end
+
 function QBCore.Functions.DrawText(x, y, width, height, scale, r, g, b, a, text)
     -- Use local function instead
     SetTextFont(4)
