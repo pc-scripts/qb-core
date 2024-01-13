@@ -22,6 +22,7 @@ QBConfig.Server = {}                                    -- General server config
 QBConfig.Server.Closed = false                          -- Set server closed (no one can join except people with ace permission 'qbadmin.join')
 QBConfig.Server.ClosedReason = 'Server Closed'          -- Reason message to display when people can't join the server
 QBConfig.Server.Uptime = 0                              -- Time the server has been up.
+QBConfig.Server.Paycheck = true                         -- Enables QBCore default paycheck system
 QBConfig.Server.Whitelist = false                       -- Enable or disable whitelist on the server
 QBConfig.Server.WhitelistPermission = 'admin'           -- Permission that's able to enter the server when the whitelist is on
 QBConfig.Server.PVP = true                              -- Enable or disable pvp on the server (Ability to shoot other players)

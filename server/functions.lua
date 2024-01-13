@@ -305,6 +305,8 @@ end
 
 ---Paychecks (standalone - don't touch)
 function PaycheckInterval()
+    if not QBConfig.Server.Paycheck then return end
+
     if next(QBCore.Players) then
         for _, Player in pairs(QBCore.Players) do
             if Player then
