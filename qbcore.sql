@@ -19,14 +19,15 @@ CREATE TABLE IF NOT EXISTS `players` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `bans` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `license` varchar(50) DEFAULT NULL,
-  `discord` varchar(50) DEFAULT NULL,
-  `ip` varchar(50) DEFAULT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `license` varchar(64) DEFAULT NULL,
+  `discord` varchar(64) DEFAULT NULL,
+  `ip` varchar(64) DEFAULT NULL,
   `reason` text DEFAULT NULL,
-  `expire` int(11) DEFAULT NULL,
-  `bannedby` varchar(255) NOT NULL DEFAULT 'LeBanhammer',
+  `banned_by` varchar(64) NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `license` (`license`),
   KEY `discord` (`discord`),
