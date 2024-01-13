@@ -3,6 +3,25 @@ QBCore.Player = {}
 
 local currentResourceName = GetCurrentResourceName()
 
+local function LoadPlayerData(column, value)
+    local query, params = MySQL.PrepareQuery('SELECT * FROM ?? where ?? = ?', {'players', column, value})
+    local PlayerData = MySQL.prepare.await(query, params)
+    if not PlayerData then return nil end
+
+    PlayerData.money = json.decode(PlayerData.money)
+    PlayerData.job = json.decode(PlayerData.job)
+    PlayerData.position = json.decode(PlayerData.position)
+    PlayerData.metadata = json.decode(PlayerData.metadata)
+    PlayerData.charinfo = json.decode(PlayerData.charinfo)
+    if PlayerData.gang then
+        PlayerData.gang = json.decode(PlayerData.gang)
+    else
+        PlayerData.gang = {}
+    end
+
+    return PlayerData
+end
+
 -- On player login get their data or set defaults
 -- Don't touch any of this unless you know what you are doing
 -- Will cause major issues!
@@ -11,26 +30,18 @@ function QBCore.Player.Login(source, citizenid, newData)
     if source and source ~= '' then
         if citizenid then
             local license = QBCore.Functions.GetIdentifier(source, 'license')
-            local PlayerData = MySQL.prepare.await('SELECT * FROM players where citizenid = ?', { citizenid })
-            if PlayerData and license == PlayerData.license then
-                PlayerData.money = json.decode(PlayerData.money)
-                PlayerData.job = json.decode(PlayerData.job)
-                PlayerData.position = json.decode(PlayerData.position)
-                PlayerData.metadata = json.decode(PlayerData.metadata)
-                PlayerData.charinfo = json.decode(PlayerData.charinfo)
-                if PlayerData.gang then
-                    PlayerData.gang = json.decode(PlayerData.gang)
-                else
-                    PlayerData.gang = {}
-                end
-                QBCore.Player.CheckPlayerData(source, PlayerData)
-            else
+            local PlayerData = LoadPlayerData('citizenid', citizenid)
+            if license ~= PlayerData.license then
                 DropPlayer(source, Lang:t('info.exploit_dropped'))
                 TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Joining Exploit', false)
+                return
             end
+
+            QBCore.Player.CheckPlayerData(source, PlayerData)
         else
             QBCore.Player.CheckPlayerData(source, newData)
         end
+
         return true
     else
         QBCore.ShowError(currentResourceName, 'ERROR QBCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
@@ -39,49 +50,26 @@ function QBCore.Player.Login(source, citizenid, newData)
 end
 
 function QBCore.Player.GetOfflinePlayer(citizenid)
-    if citizenid then
-        local PlayerData = MySQL.prepare.await('SELECT * FROM players where citizenid = ?', { citizenid })
-        if PlayerData then
-            PlayerData.money = json.decode(PlayerData.money)
-            PlayerData.job = json.decode(PlayerData.job)
-            PlayerData.position = json.decode(PlayerData.position)
-            PlayerData.metadata = json.decode(PlayerData.metadata)
-            PlayerData.charinfo = json.decode(PlayerData.charinfo)
-            if PlayerData.gang then
-                PlayerData.gang = json.decode(PlayerData.gang)
-            else
-                PlayerData.gang = {}
-            end
+    if not citizenid then return nil end
 
-            return QBCore.Player.CheckPlayerData(nil, PlayerData)
-        end
-    end
-    return nil
+    local PlayerData = LoadPlayerData('citizenid', citizenid)
+    if not PlayerData then return nil end
+
+    return QBCore.Player.CheckPlayerData(nil, PlayerData)
 end
 
 function QBCore.Player.GetPlayerByLicense(license)
-    if license then
-        local PlayerData = MySQL.prepare.await('SELECT * FROM players where license = ?', { license })
-        if PlayerData then
-            PlayerData.money = json.decode(PlayerData.money)
-            PlayerData.job = json.decode(PlayerData.job)
-            PlayerData.position = json.decode(PlayerData.position)
-            PlayerData.metadata = json.decode(PlayerData.metadata)
-            PlayerData.charinfo = json.decode(PlayerData.charinfo)
-            if PlayerData.gang then
-                PlayerData.gang = json.decode(PlayerData.gang)
-            else
-                PlayerData.gang = {}
-            end
+    if not license then return nil end
 
-            return QBCore.Player.CheckPlayerData(nil, PlayerData)
-        end
-    end
-    return nil
+    local PlayerData = LoadPlayerData('license', license)
+    if not PlayerData then return nil end
+
+    return QBCore.Player.CheckPlayerData(nil, PlayerData)
 end
 
 function QBCore.Player.CheckPlayerData(source, PlayerData)
     PlayerData = PlayerData or {}
+
     local Offline = true
     if source then
         PlayerData.source = source
@@ -182,6 +170,7 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
     -- Other
     PlayerData.position = PlayerData.position or QBCore.Config.DefaultSpawn
     PlayerData.items = GetResourceState('qb-inventory') ~= 'missing' and exports['qb-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid) or {}
+
     return QBCore.Player.CreatePlayer(PlayerData, Offline)
 end
 
