@@ -11,9 +11,6 @@ local function SetMethod(methodName, handler)
     return true, 'success'
 end
 
-QBCore.Functions.SetMethod = SetMethod
-exports('SetMethod', SetMethod)
-
 -- Add or change (a) field(s) in the QBCore table
 local function SetField(fieldName, data)
     if type(fieldName) ~= 'string' then
@@ -26,9 +23,6 @@ local function SetField(fieldName, data)
 
     return true, 'success'
 end
-
-QBCore.Functions.SetField = SetField
-exports('SetField', SetField)
 
 -- Single add job function which should only be used if you planning on adding a single job
 local function AddJob(jobName, job)
@@ -46,9 +40,6 @@ local function AddJob(jobName, job)
     TriggerEvent('QBCore:Server:UpdateObject')
     return true, 'success'
 end
-
-QBCore.Functions.AddJob = AddJob
-exports('AddJob', AddJob)
 
 -- Multiple Add Jobs
 local function AddJobs(jobs)
@@ -80,9 +71,6 @@ local function AddJobs(jobs)
     return true, message, nil
 end
 
-QBCore.Functions.AddJobs = AddJobs
-exports('AddJobs', AddJobs)
-
 -- Single Remove Job
 local function RemoveJob(jobName)
     if type(jobName) ~= 'string' then
@@ -99,9 +87,6 @@ local function RemoveJob(jobName)
     TriggerEvent('QBCore:Server:UpdateObject')
     return true, 'success'
 end
-
-QBCore.Functions.RemoveJob = RemoveJob
-exports('RemoveJob', RemoveJob)
 
 -- Single Update Job
 local function UpdateJob(jobName, job)
@@ -120,9 +105,6 @@ local function UpdateJob(jobName, job)
     return true, 'success'
 end
 
-QBCore.Functions.UpdateJob = UpdateJob
-exports('UpdateJob', UpdateJob)
-
 -- Single add item
 local function AddItem(itemName, item)
     if type(itemName) ~= 'string' then
@@ -140,9 +122,6 @@ local function AddItem(itemName, item)
     return true, 'success'
 end
 
-QBCore.Functions.AddItem = AddItem
-exports('AddItem', AddItem)
-
 -- Single update item
 local function UpdateItem(itemName, item)
     if type(itemName) ~= 'string' then
@@ -156,9 +135,6 @@ local function UpdateItem(itemName, item)
     TriggerEvent('QBCore:Server:UpdateObject')
     return true, 'success'
 end
-
-QBCore.Functions.UpdateItem = UpdateItem
-exports('UpdateItem', UpdateItem)
 
 -- Multiple Add Items
 local function AddItems(items)
@@ -190,9 +166,6 @@ local function AddItems(items)
     return true, message, nil
 end
 
-QBCore.Functions.AddItems = AddItems
-exports('AddItems', AddItems)
-
 -- Single Remove Item
 local function RemoveItem(itemName)
     if type(itemName) ~= 'string' then
@@ -210,9 +183,6 @@ local function RemoveItem(itemName)
     return true, 'success'
 end
 
-QBCore.Functions.RemoveItem = RemoveItem
-exports('RemoveItem', RemoveItem)
-
 -- Single Add Gang
 local function AddGang(gangName, gang)
     if type(gangName) ~= 'string' then
@@ -229,9 +199,6 @@ local function AddGang(gangName, gang)
     TriggerEvent('QBCore:Server:UpdateObject')
     return true, 'success'
 end
-
-QBCore.Functions.AddGang = AddGang
-exports('AddGang', AddGang)
 
 -- Multiple Add Gangs
 local function AddGangs(gangs)
@@ -263,9 +230,6 @@ local function AddGangs(gangs)
     return true, message, nil
 end
 
-QBCore.Functions.AddGangs = AddGangs
-exports('AddGangs', AddGangs)
-
 -- Single Remove Gang
 local function RemoveGang(gangName)
     if type(gangName) ~= 'string' then
@@ -283,9 +247,6 @@ local function RemoveGang(gangName)
     return true, 'success'
 end
 
-QBCore.Functions.RemoveGang = RemoveGang
-exports('RemoveGang', RemoveGang)
-
 -- Single Update Gang
 local function UpdateGang(gangName, gang)
     if type(gangName) ~= 'string' then
@@ -302,9 +263,6 @@ local function UpdateGang(gangName, gang)
     TriggerEvent('QBCore:Server:UpdateObject')
     return true, 'success'
 end
-
-QBCore.Functions.UpdateGang = UpdateGang
-exports('UpdateGang', UpdateGang)
 
 local function GetCoreVersion(InvokingResource)
     local resourceVersion = GetResourceMetadata(GetCurrentResourceName(), 'version')
@@ -330,4 +288,35 @@ local function ExploitBan(playerId, origin, seconds)
     TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'red', name .. ' has been banned for exploiting ' .. origin, true)
 end
 
+QBCore.Functions.GetCoreVersion = GetCoreVersion
+QBCore.Functions.UpdateGang = UpdateGang
+QBCore.Functions.RemoveGang = RemoveGang
+QBCore.Functions.AddGangs = AddGangs
+QBCore.Functions.SetMethod = SetMethod
+QBCore.Functions.SetField = SetField
+QBCore.Functions.AddJob = AddJob
+QBCore.Functions.AddJobs = AddJobs
+QBCore.Functions.RemoveJob = RemoveJob
+QBCore.Functions.UpdateJob = UpdateJob
+QBCore.Functions.AddItem = AddItem
+QBCore.Functions.UpdateItem = UpdateItem
+QBCore.Functions.AddItems = AddItems
+QBCore.Functions.RemoveItem = RemoveItem
+QBCore.Functions.AddGang = AddGang
+
 exports('ExploitBan', ExploitBan)
+exports('GetCoreVersion', GetCoreVersion)
+exports('UpdateGang', UpdateGang)
+exports('RemoveGang', RemoveGang)
+exports('AddGangs', AddGangs)
+exports('SetMethod', SetMethod)
+exports('SetField', SetField)
+exports('AddJob', AddJob)
+exports('AddJobs', AddJobs)
+exports('RemoveJob', RemoveJob)
+exports('UpdateJob', UpdateJob)
+exports('AddItem', AddItem)
+exports('UpdateItem', UpdateItem)
+exports('AddItems', AddItems)
+exports('RemoveItem', RemoveItem)
+exports('AddGang', AddGang)

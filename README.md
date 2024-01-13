@@ -2,6 +2,8 @@
 
 ### [Official QBCore Documentation](https://docs.qbcore.org)
 
+This version of qb-core requires the modified version of [oxmysql](https://github.com/pc-scripts/oxmysql)
+
 # License
 
     QBCore Framework
